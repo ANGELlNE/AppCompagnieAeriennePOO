@@ -1,4 +1,4 @@
-package AppCompagnieAeriennePOO.model;
+package acap.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +21,9 @@ public class Passager extends Personne {
         reservations.remove(reservation);
     }
 
-    public List<Reservation> obtenirReservations() { return reservations;}
-    public String getPassport() { return passport;}
-    
-    public void setReservations(List<Reservation> reservations) { this.reservations = reservations;}
-    public void setPassport(String passport) { this.passport = passport;}
+    public List<Reservation> obtenirReservations() { return this.reservations; }
+    public String getPassport() { return this.passeport; }
 
+    public void setReservations(List<Reservation> reservations) { this.reservations = reservations; }
+    public void setPassport(String passport) { this.passeport = passport; }
 }

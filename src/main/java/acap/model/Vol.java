@@ -1,8 +1,10 @@
-package AppCompagnieAeriennePOO.model;
+package acap.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import acap.enumeration.EtatVol;
 
 public class Vol {
     private String numeroVol;
@@ -10,14 +12,14 @@ public class Vol {
     private Aeroport destination;
     private LocalDateTime dateHeureDepart;
     private LocalDateTime dateHeureArrivee;
-    private String etat;
+    private EtatVol etat;
 
     private Avion avion;
     private Pilote pilote;
     private List<Passager> passagers;
     private List<PersonnelCabine> equipeCabine;
 
-    public Vol(String numeroVol, Aeroport origine, Aeroport destination, LocalDateTime dateHeureDepart, LocalDateTime dateHeureArrivee, String etat) {
+    public Vol(String numeroVol, Aeroport origine, Aeroport destination, LocalDateTime dateHeureDepart, LocalDateTime dateHeureArrivee, EtatVol etat) {
         this.numeroVol = numeroVol;
         this.origine = origine;
         this.destination = destination;
@@ -33,7 +35,7 @@ public class Vol {
     public Aeroport getDestination() { return destination;}
     public LocalDateTime getDateHeureDepart() { return dateHeureDepart;}
     public LocalDateTime getDateHeureArrivee() { return dateHeureArrivee;}
-    public String getEtat() { return etat;}
+    public EtatVol getEtat() { return etat;}
     public Avion getAvion() { return avion;}
     public Pilote getPilote() { return pilote;}
     public List<PersonnelCabine> getEquipeCabine() { return equipeCabine;}
@@ -44,18 +46,18 @@ public class Vol {
     public void setDestination(Aeroport destination) { this.destination = destination;}
     public void setDateHeureDepart(LocalDateTime dateHeureDepart) { this.dateHeureDepart = dateHeureDepart;}
     public void setDateHeureArrivee(LocalDateTime dateHeureArrivee) { this.dateHeureArrivee = dateHeureArrivee;}
-    public void setEtat(String etat) { this.etat = etat;}
+    public void setEtat(EtatVol etat) { this.etat = etat;}
     public void setAvion(Avion avion) { this.avion = avion;}
     public void setPilote(Pilote pilote) { this.pilote = pilote;}
     public void setEquipeCabine(List<PersonnelCabine> equipeCabine) { this.equipeCabine = equipeCabine;}
     public void setPassagers(List<Passager> passagers) { this.passagers = passagers;}
 
     public void planifierVol() {
-        this.etat = "Planifié";
+        this.etat = EtatVol.PLANIFIE;
     }
 
     public void annulerVol() {
-        this.etat = "Annulé";
+        this.etat = EtatVol.ANNULE;
     }
 
     public void modifierVol(Aeroport origine, Aeroport destination, LocalDateTime depart, LocalDateTime arrivee) {

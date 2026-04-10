@@ -1,8 +1,8 @@
-package AppCompagnieAeriennePOO.model;
+package acap.model;
 
 import java.time.LocalDate;
 
-import AppCompagnieAeriennePOO.enumeration.StatutReservation;
+import acap.enumeration.StatutReservation;
 
 public class Reservation {
     private String numeroReservation;
@@ -26,7 +26,7 @@ public class Reservation {
 
     public void setNumeroReservation(String numeroReservation) { this.numeroReservation = numeroReservation;}
     public void setDateReservation(LocalDate dateReservation) { this.dateReservation = dateReservation;}
-    public void setStatut(String statut) { this.statut = statut;}
+    public void setStatut(StatutReservation statut) { this.statut = statut;}
     public void setPassager(Passager passager) { this.passager = passager;}
     public void setVol(Vol vol) { this.vol = vol;}
 

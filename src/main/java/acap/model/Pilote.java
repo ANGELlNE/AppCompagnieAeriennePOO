@@ -1,7 +1,6 @@
-package AppCompagnieAeriennePOO.model;
+package acap.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +32,4 @@ public class Pilote extends Employe {
     public String obtenirRole() {
         return "Rôle : Pilote";
     }
-
 }

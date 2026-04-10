@@ -1,14 +1,22 @@
-package AppCompagnieAeriennePOO.model;
+package acap.model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Aeroport {
     private String nom;
     private String ville;
     private String description;
 
+    private List<Vol> volsDepart;
+    private List<Vol> volsArrivee;
+
     public Aeroport(String nom, String ville, String description) {
         this.nom = nom;
         this.ville = ville;
         this.description = description;
+        this.volsDepart = new ArrayList<>();
+        this.volsArrivee = new ArrayList<>();
     }
 
     public String getNom() { return nom;}
@@ -23,4 +31,8 @@ public class Aeroport {
         System.out.println("Vol affecté à l'aéroport : " + nom);
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", nom, ville);
+    }
 }

@@ -1,7 +1,4 @@
-package AppCompagnieAeriennePOO.model;
-
-import java.util.ArrayList;
-import java.util.List;
+package acap.model;
 
 public class Avion {
     private String immatriculation;
@@ -18,10 +15,9 @@ public class Avion {
     public String getModele() { return this.modele; }
     public int getCapacite() { return this.capacite; }
 
-    public void setImmatriculation(String immatriculation) { this.immatriculation = immatriculation;}
-    public void setModele(String modele) { this.modele = modele;}
-    public void setCapacite(int capacite) { this.capacite = capacite;}
-
+    public void setImmatriculation(String immatriculation) { this.immatriculation = immatriculation; }
+    public void setModele(String modele) { this.modele = modele; }
+    public void setCapacite(int capacite) { this.capacite = capacite; }
 
     public void affecterVol(Vol vol) {
         if (vol != null) {
@@ -30,7 +26,11 @@ public class Avion {
     }
 
     public boolean verifierDisponibilite() {
-        // Jle fait après 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s)", immatriculation, modele);
     }
 }

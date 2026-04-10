@@ -1,4 +1,4 @@
-package AppCompagnieAeriennePOO.model;
+package acap.model;
 
 public abstract class Personne {
     private static int compteurId;

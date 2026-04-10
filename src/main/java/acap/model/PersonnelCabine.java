@@ -1,4 +1,4 @@
-package AppCompagnieAeriennePOO.model;
+package acap.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ public class PersonnelCabine extends Employe {
     private String qualification;
     private List<Vol> vols;
 
-    public PersonnelCabine(String nom, String adresse, String contact, String numeroEmploye, LocalDate dateEmbauche, String qualification) {
+    public PersonnelCabine(String nom, String adresse, String contact, int numeroEmploye, LocalDate dateEmbauche, String qualification) {
         super(nom, adresse, contact, numeroEmploye, dateEmbauche);
         this.qualification = qualification;
         this.vols = new ArrayList<>();
