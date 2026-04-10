@@ -1,4 +1,7 @@
+package MiniProjet.model;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Vol {
     private String numeroVol;
@@ -7,6 +10,8 @@ public class Vol {
     private LocalDateTime dateHeureDepart;
     private LocalDateTime dateHeureArrivee;
     private String etat;
+    private ArrayList<Passager> passagers;
+    private ArrayList<PersonnelCabine> equipeCabine;
 
     public Vol(String numeroVol, Aeroport origine, Aeroport destination, LocalDateTime dateHeureDepart, LocalDateTime dateHeureArrivee, String etat) {
         this.numeroVol = numeroVol;

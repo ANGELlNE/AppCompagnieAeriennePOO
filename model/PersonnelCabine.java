@@ -1,3 +1,5 @@
+package MiniProjet.model;
+
 public class PersonnelCabine extends Employe {
     private String qualification;
 
@@ -12,5 +14,9 @@ public class PersonnelCabine extends Employe {
 
     public Vol obtenirVol() {
         return; 
+    }
+
+    public String obtenirRole() {
+        return "Rôle : Personnel de cabine";
     }
 }

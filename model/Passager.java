@@ -7,8 +7,8 @@ public class Passager extends Personne {
     private String passeport;
     private List<Reservation> reservations;
 
-    public Passager(int identifiant, String nom, String adresse, String contact, String passeport) {
-        super(identifiant, nom, adresse, contact);
+    public Passager(String nom, String adresse, String contact, String passeport) {
+        super(nom, adresse, contact);
         this.passeport = passeport;
         this.reservations = new ArrayList<>();
     }

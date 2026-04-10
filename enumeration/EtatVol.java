@@ -1,3 +1,3 @@
 package MiniProjet.enumeration;
 
-public enum EtatVol { PLANNIFIE, EN_COURS, TERMINE, ANNULE }
+public enum EtatVol { PLANIFIE, EN_COURS, TERMINE, ANNULE }

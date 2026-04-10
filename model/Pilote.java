@@ -1,4 +1,4 @@
-package Mini_Projet;
+package Mini_Projet.model;
 
 public class Pilote extends Employe {
 

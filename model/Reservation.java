@@ -1,13 +1,13 @@
-package MiniProjet;
+package MiniProjet.model;
 
 import java.time.LocalDate;
 
-import enumeration.StatutReservation;
+import MiniProjet.enumeration.StatutReservation;
 
 public class Reservation {
     private String numeroReservation;
-    private String dateReservation;
-    private String statut;
+    private LocalDate dateReservation;
+    private StatutReservation statut;
     private Vol vol;
 
     public Reservation(String numeroReservation, String statut) {
@@ -17,14 +17,14 @@ public class Reservation {
     }
 
     public void confirmerReservation() {
-        statut = "Confirmée";
+        statut = StatutReservation.CONFIRME;
     }
 
     public void annulerReservation() {
-        statut = "Annulée";
+        statut = StatutReservation.ANNULE;
     }
 
-    public void modifierReservation(String nouvelleDate) {
-        this.dateReservation = nouvelleDate;
+    public void modifierReservation(Vol nouveauVol) {
+        this.vol = nouveauVol;
     }
 }
