@@ -1,4 +1,4 @@
-package MiniProjet;
+package AppCompagnieAeriennePOO.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +13,18 @@ public class Passager extends Personne {
         this.reservations = new ArrayList<>();
     }
 
-    public void reserverVol(Vol vol) {
-        this.reservations.add();
+    public void reserverVol(Reservation reservation) {
+        this.reservations.add(reservation);
     }
 
     public void annulerReservation(Reservation reservation) {
         reservations.remove(reservation);
     }
 
-    public List<Reservation> obtenirReservations() {
-        return reservations;
-    }
+    public List<Reservation> obtenirReservations() { return reservations;}
+    public String getPassport() { return passport;}
+    
+    public void setReservations(List<Reservation> reservations) { this.reservations = reservations;}
+    public void setPassport(String passport) { this.passport = passport;}
+
 }

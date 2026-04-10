@@ -1,4 +1,4 @@
-package MiniProjet.model;
+package AppCompagnieAeriennePOO.model;
 
 import java.time.LocalDate;
 
@@ -12,5 +12,12 @@ public abstract class Employe extends Personne {
         this.dateEmbauche = dateEmbauche;
     }
 
+    public String getNumeroEmploye() { return numeroEmploye;}
+    public LocalDate getDateEmbauche() { return dateEmbauche;}
+
+    public void setNumeroEmploye(String numeroEmploye) { this.numeroEmploye = numeroEmploye;}
+    public void setDateEmbauche(LocalDate dateEmbauche) { this.dateEmbauche = dateEmbauche;}
+
     public abstract String obtenirRole();
+
 }

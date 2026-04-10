@@ -1,5 +1,8 @@
-package MiniProjet;
+package AppCompagnieAeriennePOO;
 
-public static void main(String[] args) {
-    Serial.out.println("Début du Test");
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Début du Test");
+    }
 }
+

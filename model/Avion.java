@@ -1,4 +1,4 @@
-package MiniProjet.model;
+package AppCompagnieAeriennePOO.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,6 @@ public class Avion {
     private String immatriculation;
     private String modele;
     private int capacite;
-    private Vol vol;
-    private List<Reservation> reservations = new ArrayList<>();
 
     public Avion(String immatriculation, String modele, int capacite) {
         this.immatriculation = immatriculation;
@@ -20,11 +18,15 @@ public class Avion {
     public String getModele() { return this.modele; }
     public int getCapacite() { return this.capacite; }
 
-    public void affecterVol() {
-        if (!this.verifierDisponibilite()) {
-            System.out.printf("Le vol %d n'est pas disponible.\n", vol.getNumeroVol());
+    public void setImmatriculation(String immatriculation) { this.immatriculation = immatriculation;}
+    public void setModele(String modele) { this.modele = modele;}
+    public void setCapacite(int capacite) { this.capacite = capacite;}
+
+
+    public void affecterVol(Vol vol) {
+        if (vol != null) {
+            vol.setAvion(this);
         }
-        this.vol = vol;
     }
 
     public boolean verifierDisponibilite() {

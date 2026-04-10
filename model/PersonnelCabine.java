@@ -1,22 +1,32 @@
-package MiniProjet.model;
+package AppCompagnieAeriennePOO.model;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonnelCabine extends Employe {
     private String qualification;
+    private List<Vol> vols;
 
-    public PersonnelCabine(int identifiant, String nom, String adresse, String contact, String numeroEmploye, String dateEmbauche, String qualification) {
-        super(identifiant, nom, adresse, contact, numeroEmploye, dateEmbauche);
+    public PersonnelCabine(String nom, String adresse, String contact, String numeroEmploye, LocalDate dateEmbauche, String qualification) {
+        super(nom, adresse, contact, numeroEmploye, dateEmbauche);
         this.qualification = qualification;
+        this.vols = new ArrayList<>();
     }
+
+    public List<Vol> obtenirVol() { return vols;}
+    public String getQualification() { return qualification;}
+    public void setQualification(String qualification) { this.qualification = qualification;}
+    public void setVols(List<Vol> vols) { this.vols = vols;}
 
     public void affecterVol(Vol vol) {
-        System.out.println("Personnel de cabine affecté au vol " + vol.getNumeroVol());
+        if (vol != null) {
+            vols.add(vol);
+        }
     }
 
-    public Vol obtenirVol() {
-        return; 
-    }
-
+    @Override
     public String obtenirRole() {
-        return "Rôle : Personnel de cabine";
+        return "Rôle : Personnel de Cabine";
     }
 }
