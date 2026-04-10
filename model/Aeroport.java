@@ -1,8 +1,5 @@
 package AppCompagnieAeriennePOO.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Aeroport {
     private String nom;
     private String ville;

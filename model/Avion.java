@@ -30,6 +30,7 @@ public class Avion {
     }
 
     public boolean verifierDisponibilite() {
-        return true; 
+        // Jle fait après 
+        return true;
     }
 }

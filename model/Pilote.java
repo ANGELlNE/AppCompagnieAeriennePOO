@@ -25,6 +25,9 @@ public class Pilote extends Employe {
     public void setHeuresDeVol(int heuresDeVol) { this.heuresDeVol = heuresDeVol;}
     public void setVols(List<Vol> vols) { this.vols = vols;}
 
+    public void affecterVol(Vol vol) {
+        vols.add(vol);
+    }
 
     @Override
     public String obtenirRole() {
