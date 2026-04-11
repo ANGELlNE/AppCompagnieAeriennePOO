@@ -11,6 +11,14 @@ public class Aeroport {
     private List<Vol> volsDepart;
     private List<Vol> volsArrivee;
 
+    public Aeroport(String nom, String ville) {
+        this.nom = nom;
+        this.ville = ville;
+        this.description = "Aucun";
+        this.volsDepart = new ArrayList<>();
+        this.volsArrivee = new ArrayList<>();
+    }
+
     public Aeroport(String nom, String ville, String description) {
         this.nom = nom;
         this.ville = ville;
@@ -28,6 +36,11 @@ public class Aeroport {
     public void setDescription(String description) { this.description = description;}
 
     public void affecterVol(Vol vol) {
+        if (vol.getOrigine() == this) {
+            volsDepart.add(vol);
+        } else if (vol.getDestination() == this) {
+            volsArrivee.add(vol);
+        }
         System.out.println("Vol affecté à l'aéroport : " + nom);
     }
 

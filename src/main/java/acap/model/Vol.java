@@ -1,8 +1,10 @@
 package acap.model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import acap.enumeration.EtatVol;
 
@@ -67,8 +69,7 @@ public class Vol {
         this.dateHeureArrivee = arrivee;
     }
 
-    public List<Passager> listerPassagers() { return passagers;
-    }
+    public List<Passager> listerPassagers() { return passagers; }
 
     public void ajouterPassager(Passager passager) {
         if (passager != null) {
@@ -76,4 +77,35 @@ public class Vol {
         }
     }
 
+    public String obtenirGraph(LocalDateTime currentTime) {
+        String nomOrigine = this.origine.getNom();
+        String nomDestination = this.destination.getNom();
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+        String heureDepart = dateHeureDepart.format(timeFormat);
+        String heureArrivee = dateHeureArrivee.format(timeFormat);
+        if (this.etat == EtatVol.PLANIFIE) {
+            return String.format("%s (%s) %54s (%s) %s", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+        } else if (this.etat == EtatVol.EN_COURS) {
+            Duration dureeVol = Duration.between(dateHeureDepart, dateHeureArrivee);
+            Duration dureeEcoule = Duration.between(dateHeureDepart, currentTime);
+            int pctProgression = Math.round(dureeEcoule.getSeconds() * 100 / dureeVol.getSeconds());
+            if (pctProgression < 0) pctProgression = 0;
+            if (pctProgression == 100) {
+                this.etat = EtatVol.TERMINE;
+                return String.format("%s (%s) %sX (%s) %s", nomOrigine, heureDepart, "-".repeat(53), heureArrivee, nomDestination);
+            }
+            int nTirets = Math.round(53 * pctProgression / 100);
+            return String.format("%s (%s) %s>%s (%s) %s", nomOrigine, heureDepart, "-".repeat(nTirets), " ".repeat(53-nTirets), heureArrivee, nomDestination);
+        } else if (this.etat == EtatVol.RETARDE) {
+            return String.format("\033[33m%s (%s) [RETARDÉ] %44s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+        } else if (this.etat == EtatVol.ANNULE) {
+            return String.format("\033[31m%s (%s) [ANNULÉ] %45s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+        } else if (this.etat == EtatVol.TERMINE) {
+            return String.format("\033[32m%s (%s) [TERMINÉ] %44s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+        } else if (this.etat == EtatVol.CRASHED) {
+            return String.format("\033[35m%s (%s) [CRASHED] %44s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+        } else {
+            return String.format("%23sAffichage de l'état non supporté%23s", "", "");
+        }
+    }
 }
