@@ -120,9 +120,16 @@ public class App {
         l1spc = Math.max(0, l1spc);
         System.out.printf("║Vol %-5s%s%s║\n", numeroVol, " ".repeat(l1spc), airline);
 
-        int l2spc = 57 - origIATA.length() - origVille.length() - destIATA.length() - destVille.length();
+        String l2string = String.format("%s (%s) -> %s (%s) en %s", origIATA, origVille, destIATA, destVille, tempsRestant);
+        int l2spc = (78 - l2string.length()) / 2;
         l2spc = Math.max(0, l2spc);
-        System.out.printf("║%s (%s) -> %s (%s) %sen %s║\n", origIATA, origVille, destIATA, destVille, " ".repeat(l2spc), tempsRestant);
+        if (l2spc % 2 == 0) {
+            System.out.printf("║%s%s%s║\n", " ".repeat(l2spc), l2string, " ".repeat(l2spc));
+        } else {
+            System.out.printf("║%s%s%s ║\n", " ".repeat(l2spc), l2string, " ".repeat(l2spc));
+        }
+
+        System.out.printf("╟%s╢\n", "-".repeat(78));
 
         int l3spc = 52 - avion.toString().length() - Integer.toString(personnelAmt).length() - Integer.toString(passagersAmt).length();
         l3spc = Math.max(0, l3spc);
@@ -187,8 +194,13 @@ public class App {
 
         ArrayList<PersonnelCabine> personnels = new ArrayList<PersonnelCabine>();
         int personnelsMax = avion.getcapacitePersonnel();
-        for (int i = 0; i < random.nextInt(2, personnelsMax-2); ++i) {
+        if (personnelsMax == 4) {
             personnels.add(new PersonnelCabine("", "", "", 0, LocalDate.now(), ""));
+            personnels.add(new PersonnelCabine("", "", "", 0, LocalDate.now(), ""));
+        } else {
+            for (int i = 0; i < random.nextInt(2, personnelsMax-2); ++i) {
+                personnels.add(new PersonnelCabine("", "", "", 0, LocalDate.now(), ""));
+            }
         }
 
         ArrayList<Passager> passagers = new ArrayList<Passager>();
