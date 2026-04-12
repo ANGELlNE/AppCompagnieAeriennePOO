@@ -3,21 +3,24 @@ package acap.model;
 public class Avion {
     private String immatriculation;
     private String modele;
-    private int capacite;
+    private int capacitePersonnel;
+    private int capacitePassager;
 
-    public Avion(String immatriculation, String modele, int capacite) {
+    public Avion(String immatriculation, String modele, int capacitePersonnel, int capacitePassager) {
         this.immatriculation = immatriculation;
         this.modele = modele;
-        this.capacite = capacite;
+        this.capacitePersonnel = capacitePersonnel;
+        this.capacitePassager = capacitePassager;
     }
 
     public String getImmatriculation() { return this.immatriculation; }
     public String getModele() { return this.modele; }
-    public int getCapacite() { return this.capacite; }
+    public int getcapacitePersonnel() { return this.capacitePersonnel; }
+    public int getcapacitePassager() { return this.capacitePassager; }
 
     public void setImmatriculation(String immatriculation) { this.immatriculation = immatriculation; }
     public void setModele(String modele) { this.modele = modele; }
-    public void setCapacite(int capacite) { this.capacite = capacite; }
+    public void setcapacitePassager(int capacitePassager) { this.capacitePassager = capacitePassager; }
 
     public void affecterVol(Vol vol) {
         if (vol != null) {

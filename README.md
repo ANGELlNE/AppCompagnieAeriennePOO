@@ -1,7 +1,7 @@
 # AppCompagnieAeriennePOO
 L'objectif de ce projet est de développer une application qui gère un système de réservation d’une compagnie aérienne avec toutes les fonctionnalités requises en POO.
 
-# Lancer le projet
+## Lancer le projet
 Une version de Java au-dessus de 14 est requise.
 
 Installer Maven sur le [site officiel](https://maven.apache.org/download.cgi#CurrentMaven)<br>

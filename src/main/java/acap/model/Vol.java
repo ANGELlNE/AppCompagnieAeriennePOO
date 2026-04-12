@@ -17,7 +17,7 @@ public class Vol {
     private EtatVol etat;
 
     private Avion avion;
-    private Pilote pilote;
+    private List<Pilote> pilotes;
     private List<Passager> passagers;
     private List<PersonnelCabine> equipeCabine;
 
@@ -28,31 +28,32 @@ public class Vol {
         this.dateHeureDepart = dateHeureDepart;
         this.dateHeureArrivee = dateHeureArrivee;
         this.etat = etat;
+        this.pilotes = new ArrayList<>();
         this.equipeCabine = new ArrayList<>();
         this.passagers = new ArrayList<>();
     }
 
-    public String getNumeroVol() { return numeroVol;}
-    public Aeroport getOrigine() { return origine;}
-    public Aeroport getDestination() { return destination;}
-    public LocalDateTime getDateHeureDepart() { return dateHeureDepart;}
-    public LocalDateTime getDateHeureArrivee() { return dateHeureArrivee;}
-    public EtatVol getEtat() { return etat;}
-    public Avion getAvion() { return avion;}
-    public Pilote getPilote() { return pilote;}
-    public List<PersonnelCabine> getEquipeCabine() { return equipeCabine;}
-    public List<Passager> getPassagers() { return passagers;}
+    public String getNumeroVol() { return numeroVol; }
+    public Aeroport getOrigine() { return origine; }
+    public Aeroport getDestination() { return destination; }
+    public LocalDateTime getDateHeureDepart() { return dateHeureDepart; }
+    public LocalDateTime getDateHeureArrivee() { return dateHeureArrivee; }
+    public EtatVol getEtat() { return etat; }
+    public Avion getAvion() { return avion; }
+    public List<Pilote> getPilotes() { return pilotes; }
+    public List<PersonnelCabine> getEquipeCabine() { return equipeCabine; }
+    public List<Passager> getPassagers() { return passagers; }
 
-    public void setNumeroVol(String numeroVol) { this.numeroVol = numeroVol;}
-    public void setOrigine(Aeroport origine) { this.origine = origine;}
+    public void setNumeroVol(String numeroVol) { this.numeroVol = numeroVol; }
+    public void setOrigine(Aeroport origine) { this.origine = origine; }
     public void setDestination(Aeroport destination) { this.destination = destination;}
-    public void setDateHeureDepart(LocalDateTime dateHeureDepart) { this.dateHeureDepart = dateHeureDepart;}
-    public void setDateHeureArrivee(LocalDateTime dateHeureArrivee) { this.dateHeureArrivee = dateHeureArrivee;}
-    public void setEtat(EtatVol etat) { this.etat = etat;}
-    public void setAvion(Avion avion) { this.avion = avion;}
-    public void setPilote(Pilote pilote) { this.pilote = pilote;}
-    public void setEquipeCabine(List<PersonnelCabine> equipeCabine) { this.equipeCabine = equipeCabine;}
-    public void setPassagers(List<Passager> passagers) { this.passagers = passagers;}
+    public void setDateHeureDepart(LocalDateTime dateHeureDepart) { this.dateHeureDepart = dateHeureDepart; }
+    public void setDateHeureArrivee(LocalDateTime dateHeureArrivee) { this.dateHeureArrivee = dateHeureArrivee; }
+    public void setEtat(EtatVol etat) { this.etat = etat; }
+    public void setAvion(Avion avion) { this.avion = avion; }
+    public void setPilotes(List<Pilote> pilotes) { this.pilotes = pilotes; }
+    public void setEquipeCabine(List<PersonnelCabine> equipeCabine) { this.equipeCabine = equipeCabine; }
+    public void setPassagers(List<Passager> passagers) { this.passagers = passagers; }
 
     public void planifierVol() {
         this.etat = EtatVol.PLANIFIE;
@@ -84,7 +85,7 @@ public class Vol {
         String heureDepart = dateHeureDepart.format(timeFormat);
         String heureArrivee = dateHeureArrivee.format(timeFormat);
         if (this.etat == EtatVol.PLANIFIE) {
-            return String.format("%s (%s) %54s (%s) %s", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+            return String.format("%-7s %s (%s) %46s (%s) %s", numeroVol, nomOrigine, heureDepart, "", heureArrivee, nomDestination);
         } else if (this.etat == EtatVol.EN_COURS) {
             Duration dureeVol = Duration.between(dateHeureDepart, dateHeureArrivee);
             Duration dureeEcoule = Duration.between(dateHeureDepart, currentTime);
@@ -92,18 +93,18 @@ public class Vol {
             if (pctProgression < 0) pctProgression = 0;
             if (pctProgression == 100) {
                 this.etat = EtatVol.TERMINE;
-                return String.format("%s (%s) %sX (%s) %s", nomOrigine, heureDepart, "-".repeat(53), heureArrivee, nomDestination);
+                return String.format("%-7s %s (%s) %sX (%s) %s", numeroVol, nomOrigine, heureDepart, "-".repeat(45), heureArrivee, nomDestination);
             }
-            int nTirets = Math.round(53 * pctProgression / 100);
-            return String.format("%s (%s) %s>%s (%s) %s", nomOrigine, heureDepart, "-".repeat(nTirets), " ".repeat(53-nTirets), heureArrivee, nomDestination);
+            int nTirets = Math.round(45 * pctProgression / 100);
+            return String.format("%-7s %s (%s) %s>%s (%s) %s", numeroVol, nomOrigine, heureDepart, "-".repeat(nTirets), " ".repeat(45-nTirets), heureArrivee, nomDestination);
         } else if (this.etat == EtatVol.RETARDE) {
-            return String.format("\033[33m%s (%s) [RETARDÉ] %44s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+            return String.format("\033[33m%-7s %s (%s) [RETARDÉ] %36s (%s) %s\033[0m", numeroVol, nomOrigine, heureDepart, "", heureArrivee, nomDestination);
         } else if (this.etat == EtatVol.ANNULE) {
-            return String.format("\033[31m%s (%s) [ANNULÉ] %45s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+            return String.format("\033[31m%-7s %s (%s) [ANNULÉ] %37s (%s) %s\033[0m",numeroVol, nomOrigine, heureDepart, "", heureArrivee, nomDestination);
         } else if (this.etat == EtatVol.TERMINE) {
-            return String.format("\033[32m%s (%s) [TERMINÉ] %44s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+            return String.format("\033[32m%-7s %s (%s) [TERMINÉ] %36s (%s) %s\033[0m",numeroVol, nomOrigine, heureDepart, "", heureArrivee, nomDestination);
         } else if (this.etat == EtatVol.CRASHED) {
-            return String.format("\033[35m%s (%s) [CRASHED] %44s (%s) %s\033[0m", nomOrigine, heureDepart, "", heureArrivee, nomDestination);
+            return String.format("\033[35m%-7s %s (%s) [CRASHED] %36s (%s) %s\033[0m",numeroVol, nomOrigine, heureDepart, "", heureArrivee, nomDestination);
         } else {
             return String.format("%23sAffichage de l'état non supporté%23s", "", "");
         }
