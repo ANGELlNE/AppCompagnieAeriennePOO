@@ -18,20 +18,20 @@ public class Util {
         aeroports.add(new Aeroport("LAX", "Los Angeles", 33.9416, -118.4085));
         aeroports.add(new Aeroport("CDG", "Paris", 49.0097, 2.5479));
 
-        avions.add(new Avion("F-GKXA", "Airbus A320", 6, 180, 828));
-        avions.add(new Avion("N37273", "Boeing 737-800", 6, 189, 842));
-        avions.add(new Avion("JA873A", "Boeing 787 Dreamliner", 8, 242, 913));
-        avions.add(new Avion("A6-EEQ", "Airbus A380", 21, 517, 945));
-        avions.add(new Avion("B-16721", "Boeing 777-300ER", 12, 396, 905));
-        avions.add(new Avion("9M-MTK", "Airbus A330-300", 10, 277, 871));
-        avions.add(new Avion("PR-AXH", "Embraer E190", 4, 114, 829));
-        avions.add(new Avion("C-FJZL", "Bombardier CRJ900", 4, 90, 829));
-        avions.add(new Avion("F-HTYH", "Airbus A350-900", 10, 325, 905));
-        avions.add(new Avion("D-ABYT", "Boeing 747-8", 13, 467, 918));
-        avions.add(new Avion("ET302", "Boeing 737 MAX 8", 6, 162, 842));
+        avions.add(new Avion("F-GKXA", "Airbus A320", 6, 180, 828, 6100));
+        avions.add(new Avion("N37273", "Boeing 737-800", 6, 189, 842, 5436));
+        avions.add(new Avion("JA873A", "Boeing 787-8 Dreamliner", 8, 242, 913, 13620));
+        avions.add(new Avion("A6-EEQ", "Airbus A380", 21, 517, 945, 14800));
+        avions.add(new Avion("B-16721", "Boeing 777-300ER", 12, 396, 905, 14685));
+        avions.add(new Avion("9M-MTK", "Airbus A330-300", 10, 277, 871, 11750));
+        avions.add(new Avion("PR-AXH", "Embraer E190", 4, 114, 829, 4537));
+        avions.add(new Avion("C-FJZL", "Bombardier CRJ900", 4, 90, 829, 2871));
+        avions.add(new Avion("F-HTYH", "Airbus A350-900", 10, 325, 905, 15000));
+        avions.add(new Avion("D-ABYT", "Boeing 747-8", 13, 467, 918, 14320));
+        avions.add(new Avion("ET302", "Boeing 737 MAX 8", 6, 162, 842, 6570));
     }
 
-    public static double distanceBetween(Aeroport a1, Aeroport a2) {
+    public static double distanceEntre(Aeroport a1, Aeroport a2) {
         double lat1 = Math.toRadians(a1.getLatitude());
         double lon1 = Math.toRadians(a1.getLongitude());
         double lat2 = Math.toRadians(a2.getLatitude());
@@ -47,7 +47,7 @@ public class Util {
     }
 
     public static long tempsVolBloc(Aeroport depart, Aeroport arrivee, Avion avion) {
-        double distanceKm = distanceBetween(depart, arrivee);
+        double distanceKm = distanceEntre(depart, arrivee);
         double vitesse = avion.getVitesseCroisiere();
         if (vitesse <= 0) {
             throw new IllegalArgumentException("Aircraft cruise speed must be positive");

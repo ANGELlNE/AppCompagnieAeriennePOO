@@ -173,7 +173,12 @@ public class App {
         copyAeroports.remove(origine);
         Aeroport destination = copyAeroports.get(random.nextInt(sizeAeroports-1));
 
-        Avion avion = avions.get(random.nextInt(avions.size()));
+        ArrayList<Avion> copyAvions = new ArrayList<Avion>(avions);
+        Avion avion = avions.get(random.nextInt(copyAvions.size()));
+        while (avion.getDistanceFranchissable() < Util.distanceEntre(origine, destination)) {
+            copyAvions.remove(avion);
+            avion = avions.get(random.nextInt(copyAvions.size()));
+        }
 
         List<String> codes = new ArrayList<>(Util.Airlines.keySet());
         String airlineCode = codes.get(random.nextInt(codes.size()));
@@ -228,7 +233,7 @@ public class App {
                     vol.setEtat(EtatVol.EN_COURS);
                 }
             } else if (vol.getEtat() == EtatVol.RETARDE && vol.getDateHeureDepart().isBefore(currentTime)) {
-                if (random.nextInt(20) == 0) {
+                if (random.nextInt(25) == 0) {
                     vol.setEtat(EtatVol.EN_COURS);
                 } else {
                     vol.setDateHeureDepart(vol.getDateHeureDepart().plusMinutes(1));
