@@ -7,14 +7,18 @@ public class Aeroport {
     private String nom;
     private String ville;
     private String description;
+    private double latitude;
+    private double longitude;
 
     private List<Vol> volsDepart;
     private List<Vol> volsArrivee;
 
-    public Aeroport(String nom, String ville) {
+    public Aeroport(String nom, String ville, double latitude, double longitude) {
         this.nom = nom;
         this.ville = ville;
         this.description = "Aucun";
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.volsDepart = new ArrayList<>();
         this.volsArrivee = new ArrayList<>();
     }
@@ -30,6 +34,8 @@ public class Aeroport {
     public String getNom() { return nom;}
     public String getVille() { return ville;}
     public String getDescription() { return description;}
+    public double getLatitude() { return latitude; }
+    public double getLongitude() { return longitude; }
 
     public void setNom(String nom) { this.nom = nom;}
     public void setVille(String ville) { this.ville = ville;}

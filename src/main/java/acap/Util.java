@@ -6,53 +6,54 @@ import java.util.Map;
 import acap.model.*;
 
 public class Util {
-    public static void init(ArrayList<Aeroport> aeroports, ArrayList<Avion> avions) {
-        // Aeroport Eglin = new Aeroport("Eglin Air Force Base", "Floride", "La plus grande base aérienne américaine.");
-        Aeroport ATL = new Aeroport("ATL", "Atlanta");
-        Aeroport HDN = new Aeroport("HDN", "Tokyo");
-        Aeroport PVG = new Aeroport("PVG", "Shanghai");
-        Aeroport IST = new Aeroport("IST", "Istanbul");
-        Aeroport DEL = new Aeroport("DEL", "Delhi");
-        Aeroport ICN = new Aeroport("ICN", "Incheon");
-        Aeroport LAX = new Aeroport("LAX", "Los Angeles");
-        Aeroport CDG = new Aeroport("CDG", "Paris");
-        // aeroports.add(Eglin);
-        aeroports.add(ATL);
-        aeroports.add(HDN);
-        aeroports.add(PVG);
-        aeroports.add(IST);
-        aeroports.add(DEL);
-        aeroports.add(ICN);
-        aeroports.add(LAX);
-        aeroports.add(CDG);
+    private static final double EARTH_RADIUS_KM = 6371.0;
 
-        // Avion F35 = new Avion("22-5816", "Lockheed Martin F-35 Lightning II", 1, 0);
-        // Avion SR71 = new Avion("61-7951", "Lockheed SR-71 Blackbird", 2, 0);
-        // // Popular commercial aircraft
-        Avion A320 = new Avion("F-GKXA", "Airbus A320", 6, 180);
-        Avion B737_800 = new Avion("N37273", "Boeing 737-800", 6, 189);
-        Avion B787 = new Avion("JA873A", "Boeing 787 Dreamliner", 8, 242);
-        Avion A380 = new Avion("A6-EEQ", "Airbus A380", 21, 517);
-        Avion B777 = new Avion("B-16721", "Boeing 777-300ER", 12, 396);
-        Avion A330 = new Avion("9M-MTK", "Airbus A330-300", 10, 277);
-        Avion E190 = new Avion("PR-AXH", "Embraer E190", 4, 114);
-        Avion CRJ900 = new Avion("C-FJZL", "Bombardier CRJ900", 4, 90);
-        Avion A350 = new Avion("F-HTYH", "Airbus A350-900", 10, 325);
-        Avion B747 = new Avion("D-ABYT", "Boeing 747-8", 13, 467);
-        Avion B737 = new Avion("ET302", "Boeing 737 MAX 8", 6, 162);
-        // avions.add(F35);
-        // avions.add(SR71);
-        avions.add(A320);
-        avions.add(B737_800);
-        avions.add(B787);
-        avions.add(A380);
-        avions.add(B777);
-        avions.add(A330);
-        avions.add(E190);
-        avions.add(CRJ900);
-        avions.add(A350);
-        avions.add(B747);
-        avions.add(B737);
+    public static void init(ArrayList<Aeroport> aeroports, ArrayList<Avion> avions) {
+        aeroports.add(new Aeroport("ATL", "Atlanta", 33.6407, -84.4277));
+        aeroports.add(new Aeroport("HND", "Tokyo", 35.5533, 139.7811));
+        aeroports.add(new Aeroport("PVG", "Shanghai", 31.1434, 121.8053));
+        aeroports.add(new Aeroport("IST", "Istanbul", 41.2611, 28.7419));
+        aeroports.add(new Aeroport("DEL", "Delhi", 28.5686, 77.1124));
+        aeroports.add(new Aeroport("ICN", "Incheon", 37.4602, 126.4407));
+        aeroports.add(new Aeroport("LAX", "Los Angeles", 33.9416, -118.4085));
+        aeroports.add(new Aeroport("CDG", "Paris", 49.0097, 2.5479));
+
+        avions.add(new Avion("F-GKXA", "Airbus A320", 6, 180, 828));
+        avions.add(new Avion("N37273", "Boeing 737-800", 6, 189, 842));
+        avions.add(new Avion("JA873A", "Boeing 787 Dreamliner", 8, 242, 913));
+        avions.add(new Avion("A6-EEQ", "Airbus A380", 21, 517, 945));
+        avions.add(new Avion("B-16721", "Boeing 777-300ER", 12, 396, 905));
+        avions.add(new Avion("9M-MTK", "Airbus A330-300", 10, 277, 871));
+        avions.add(new Avion("PR-AXH", "Embraer E190", 4, 114, 829));
+        avions.add(new Avion("C-FJZL", "Bombardier CRJ900", 4, 90, 829));
+        avions.add(new Avion("F-HTYH", "Airbus A350-900", 10, 325, 905));
+        avions.add(new Avion("D-ABYT", "Boeing 747-8", 13, 467, 918));
+        avions.add(new Avion("ET302", "Boeing 737 MAX 8", 6, 162, 842));
+    }
+
+    public static double distanceBetween(Aeroport a1, Aeroport a2) {
+        double lat1 = Math.toRadians(a1.getLatitude());
+        double lon1 = Math.toRadians(a1.getLongitude());
+        double lat2 = Math.toRadians(a2.getLatitude());
+        double lon2 = Math.toRadians(a2.getLongitude());
+
+        double dLat = lat2 - lat1;
+        double dLon = lon2 - lon1;
+
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dLon / 2), 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return EARTH_RADIUS_KM * c;
+    }
+
+    public static long tempsVolBloc(Aeroport depart, Aeroport arrivee, Avion avion) {
+        double distanceKm = distanceBetween(depart, arrivee);
+        double vitesse = avion.getVitesseCroisiere();
+        if (vitesse <= 0) {
+            throw new IllegalArgumentException("Aircraft cruise speed must be positive");
+        }
+        long deltaT = Math.round((distanceKm / vitesse) * 60 + 30);
+        return deltaT;
     }
 
     // public static void printListAeroport(ArrayList<Aeroport> aeroports) {

@@ -5,18 +5,21 @@ public class Avion {
     private String modele;
     private int capacitePersonnel;
     private int capacitePassager;
+    private double vitesseCroisiere;  // en km/h
 
-    public Avion(String immatriculation, String modele, int capacitePersonnel, int capacitePassager) {
+    public Avion(String immatriculation, String modele, int capacitePersonnel, int capacitePassager, double vitesseCroisiere) {
         this.immatriculation = immatriculation;
         this.modele = modele;
         this.capacitePersonnel = capacitePersonnel;
         this.capacitePassager = capacitePassager;
+        this.vitesseCroisiere = vitesseCroisiere;
     }
 
     public String getImmatriculation() { return this.immatriculation; }
     public String getModele() { return this.modele; }
     public int getcapacitePersonnel() { return this.capacitePersonnel; }
     public int getcapacitePassager() { return this.capacitePassager; }
+    public double getVitesseCroisiere() { return this.vitesseCroisiere; }
 
     public void setImmatriculation(String immatriculation) { this.immatriculation = immatriculation; }
     public void setModele(String modele) { this.modele = modele; }

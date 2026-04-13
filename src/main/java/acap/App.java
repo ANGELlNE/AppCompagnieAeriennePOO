@@ -77,7 +77,7 @@ public class App {
             System.out.println("Appuyer sur <Ctrl+C> pour quitter.");
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(250);
             } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
             }
@@ -116,38 +116,37 @@ public class App {
         int personnelAmt = vol.getPilotes().size() + vol.getEquipeCabine().size();
         int passagersAmt = vol.getPassagers().size();
 
-        int l1spc = 69 - airline.length();
-        l1spc = Math.max(0, l1spc);
-        System.out.printf("║Vol %-5s%s%s║\n", numeroVol, " ".repeat(l1spc), airline);
+        int l1Pad = 69 - airline.length();
+        l1Pad = Math.max(0, l1Pad);
+        System.out.printf("║Vol %-5s%s%s║\n", numeroVol, " ".repeat(l1Pad), airline);
 
         String l2string = String.format("%s (%s) -> %s (%s) en %s", origIATA, origVille, destIATA, destVille, tempsRestant);
-        int l2spc = (78 - l2string.length()) / 2;
-        l2spc = Math.max(0, l2spc);
-        if (l2spc % 2 == 0) {
-            System.out.printf("║%s%s%s║\n", " ".repeat(l2spc), l2string, " ".repeat(l2spc));
-        } else {
-            System.out.printf("║%s%s%s ║\n", " ".repeat(l2spc), l2string, " ".repeat(l2spc));
-        }
+        int totalPad = (78 - l2string.length());
+        int l2PadLeft = totalPad / 2;
+        int l2PadRight = totalPad - l2PadLeft;
+        l2PadLeft = Math.max(0, l2PadLeft);
+        l2PadRight = Math.max(0, l2PadRight);
+        System.out.printf("║%s%s%s║\n", " ".repeat(l2PadLeft), l2string, " ".repeat(l2PadRight));
 
         System.out.printf("╟%s╢\n", "-".repeat(78));
 
-        int l3spc = 52 - avion.toString().length() - Integer.toString(personnelAmt).length() - Integer.toString(passagersAmt).length();
-        l3spc = Math.max(0, l3spc);
+        int l3Pad = 52 - avion.toString().length() - Integer.toString(personnelAmt).length() - Integer.toString(passagersAmt).length();
+        l3Pad = Math.max(0, l3Pad);
         String personnel;
         if (personnelAmt < 2) {
             personnel = Integer.toString(personnelAmt) + " personnel";
         } else {
-            l3spc -= 1;
+            l3Pad -= 1;
             personnel = Integer.toString(personnelAmt) + " personnels";
         }
         String passager;
         if (passagersAmt < 2) {
             passager = Integer.toString(passagersAmt) + " passager";
         } else {
-            l3spc -= 1;
+            l3Pad -= 1;
             passager = Integer.toString(passagersAmt) + " passagers";
         }
-        System.out.printf("║Avion %s%s%s %s║\n", avion, " ".repeat(l3spc), personnel, passager);
+        System.out.printf("║Avion %s%s%s %s║\n", avion, " ".repeat(l3Pad), personnel, passager);
     }
 
     public static void clearTerminal() {
@@ -183,7 +182,7 @@ public class App {
         String numeroVol = airlineCode.toString() + Long.toString(random.nextLong(Math.round(999 / (Math.pow(10, numeroLen)))));
 
         LocalDateTime dateHeureDepart = currentTime.plusHours(1).plusMinutes(random.nextInt(60));
-        LocalDateTime dateHeureArrivee = dateHeureDepart.plusMinutes(random.nextInt(720) + 60);
+        LocalDateTime dateHeureArrivee = dateHeureDepart.plusMinutes(Util.tempsVolBloc(origine, destination, avion));
 
         Vol vol = new Vol(numeroVol, origine, destination, dateHeureDepart, dateHeureArrivee, EtatVol.PLANIFIE);
         vol.setAvion(avion);
@@ -221,7 +220,7 @@ public class App {
             if (vol.getEtat() == EtatVol.PLANIFIE && random.nextInt(1000) == 0) {
                 vol.setEtat(EtatVol.ANNULE);
             } else if (vol.getEtat() == EtatVol.PLANIFIE && vol.getDateHeureDepart().isBefore(currentTime)) {
-                if (random.nextInt(100) == 0) {
+                if (random.nextInt(50) == 0) {
                     vol.setEtat(EtatVol.RETARDE);
                     vol.setDateHeureDepart(vol.getDateHeureDepart().plusMinutes(1));
                     vol.setDateHeureArrivee(vol.getDateHeureArrivee().plusMinutes(1));
@@ -237,7 +236,8 @@ public class App {
                 }
             } else if (vol.getEtat() == EtatVol.EN_COURS && vol.getDateHeureArrivee().isBefore(currentTime)) {
                 vol.setEtat(EtatVol.TERMINE);
-            } else if (vol.getEtat() == EtatVol.EN_COURS && random.nextInt(10_000) == 0) {
+            } else if (vol.getEtat() == EtatVol.EN_COURS && random.nextInt(100_000) == 0) {
+                vol.setDateHeureArrivee(currentTime);
                 vol.setEtat(EtatVol.CRASHED);
             } else if (vol.getEtat() == EtatVol.ANNULE && vol.getDateHeureDepart().isBefore(currentTime.minusHours(1))) {
                 ancienVols.add(vol);
