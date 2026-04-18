@@ -24,6 +24,9 @@ public class App {
 
     private static Map<String, ArrayList<Integer>> stats = new HashMap<String, ArrayList<Integer>> ();
 
+    private static int maxRowForFlight = 15;
+    private static int spreadAccident = 0;
+
     public static void main(String[] args) {
         Util.init(aeroports, avions);
 
@@ -66,7 +69,7 @@ public class App {
             currentTime = currentTime.plusMinutes(1);
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy HH:mm", Locale.FRENCH);
             System.out.printf("%43s║\n", currentTime.format(dateFormat));
-            if (random.nextInt(50) == 0) {
+            if (random.nextInt(15) == 0) {
                 nouveauVol();
             }
 
@@ -96,9 +99,20 @@ public class App {
         if (vols.isEmpty()) {
             System.out.printf("║%34sPas de vol%34s║\n", "", "");
         }
-        for (int i = 0; i < vols.size(); i++) {
+        int start = 0;
+        int amtVol = vols.size();
+        if (amtVol > maxRowForFlight) {
+            start = amtVol - maxRowForFlight;
+            String amtSkipped = Integer.toString(start);
+            int totalPad = 60 - amtSkipped.length();
+            int padLeft = totalPad / 2;
+            int padRight = totalPad - padLeft;
+            System.out.printf("║%s%s%s%s║\n", " ".repeat(padLeft), amtSkipped, " vols non affichés", " ".repeat(padRight));
+            System.out.println("╟" + "-".repeat(78) + "╢");
+        }
+        for (int i = start; i < amtVol; i++) {
             System.out.printf("║%s║\n", vols.get(i).obtenirGraph(currentTime));
-            if (i != vols.size() - 1) {
+            if (i != amtVol - 1) {
                 System.out.println("╟" + "─".repeat(78) + "╢");
             }
         }
@@ -259,15 +273,21 @@ public class App {
             if (vol.getEtat() == EtatVol.PLANIFIE && random.nextInt(1000) == 0) {
                 vol.setEtat(EtatVol.ANNULE);
             } else if (vol.getEtat() == EtatVol.PLANIFIE && vol.getDateHeureDepart().isBefore(currentTime)) {
-                if (random.nextInt(45) == 0) {
+                if (spreadAccident > 0 && random.nextInt(2) == 0) {
                     vol.setEtat(EtatVol.RETARDE);
+                    vol.setDateHeureDepart(vol.getDateHeureDepart().plusMinutes(1));
+                    vol.setDateHeureArrivee(vol.getDateHeureArrivee().plusMinutes(1));
+                    spreadAccident -= 1;
+                } else if (random.nextInt(15) == 0) {
+                    vol.setEtat(EtatVol.RETARDE);
+                    spreadAccident = random.nextInt(5);
                     vol.setDateHeureDepart(vol.getDateHeureDepart().plusMinutes(1));
                     vol.setDateHeureArrivee(vol.getDateHeureArrivee().plusMinutes(1));
                 } else {
                     vol.setEtat(EtatVol.EN_COURS);
                 }
             } else if (vol.getEtat() == EtatVol.RETARDE && vol.getDateHeureDepart().isBefore(currentTime)) {
-                if (random.nextInt(135) == 0) {
+                if (random.nextInt(150) == 0) {
                     vol.setEtat(EtatVol.EN_COURS);
                 } else {
                     vol.setDateHeureDepart(vol.getDateHeureDepart().plusMinutes(1));

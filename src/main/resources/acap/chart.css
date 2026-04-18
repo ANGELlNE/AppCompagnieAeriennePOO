@@ -20,11 +20,12 @@
 
 .chart-legend {
 	-fx-background-color: transparent;
-	-fx-pref-width: 340px;
+	-fx-pref-width: 500px;
 }
 
 .chart-legend-item {
 	-fx-text-fill: #CECFD2;
+	-fx-padding: 5 30 5 0;
 }
 
 .default-color0.chart-series-line {

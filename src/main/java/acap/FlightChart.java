@@ -13,6 +13,111 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.chart.ValueAxis;
+
+class LogarithmicAxis extends ValueAxis<Number> {
+    public LogarithmicAxis() {
+        super();
+    }
+
+    @Override
+    protected List<Number> calculateMinorTickMarks() {
+        return List.of();
+    }
+
+    @Override
+    protected void setRange(Object range, boolean animate) { }
+
+    @Override
+    protected Object getRange() {
+        return null;
+    }
+
+    @Override
+    protected List<Number> calculateTickValues(double length, Object range) {
+        List<Number> ticks = new ArrayList<>();
+        double lower = getLowerBound();
+        double upper = getUpperBound();
+
+        if (lower <= 0 && upper >= 0) {
+            ticks.add(0);
+        }
+
+        int startPow = (int) Math.ceil(log2(Math.max(lower, 1)));
+        int endPow = (int) Math.floor(log2(upper));
+
+        for (int pow = startPow; pow <= endPow; pow++) {
+            double value = Math.pow(2, pow);
+            if (value >= lower && value <= upper) {
+                ticks.add(value);
+            }
+        }
+
+        return ticks;
+    }
+
+    @Override
+    protected String getTickMarkLabel(Number value) {
+        double v = value.doubleValue();
+        if (v == 0) return "0";
+        if (Math.abs(v - Math.round(v)) < 1) {
+            return String.valueOf((int) v);
+        }
+        return String.format("%f", v);
+    }
+
+    @Override
+    public double getDisplayPosition(Number value) {
+        double val = value.doubleValue();
+        double lower = getLowerBound();
+        double upper = getUpperBound();
+
+        double axisLength = getHeight();
+        if (val <= 0) return axisLength;
+
+        double logVal = log2(val);
+        double logLower = log2(Math.max(lower, 1));
+        double logUpper = log2(upper);
+
+        double ratio = (logVal - logLower) / (logUpper - logLower);
+        return axisLength - (ratio * axisLength);
+    }
+
+    @Override
+    public Number getValueForDisplay(double displayPosition) {
+        double axisLength = getHeight();
+        double ratio = 1 - (displayPosition / axisLength);
+
+        double lower = getLowerBound();
+        double upper = getUpperBound();
+        double logLower = log2(Math.max(lower, 1));
+        double logUpper = log2(upper);
+
+        double logValue = logLower + ratio * (logUpper - logLower);
+        return Math.pow(2, logValue);
+    }
+
+    @Override
+    public boolean isValueOnAxis(Number value) {
+        double val = value.doubleValue();
+        return val >= getLowerBound() && val <= getUpperBound();
+    }
+
+    @Override
+    public double toNumericValue(Number value) {
+        return value.doubleValue();
+    }
+
+    @Override
+    public Number toRealValue(double value) {
+        return value;
+    }
+
+    private double log2(double x) {
+        return Math.log(x) / Math.log(2);
+    }
+}
+
 public class FlightChart extends Application {
     private record Row(int planifie, int retarde, int enCours, int annule, int termine) {}
 
@@ -38,15 +143,15 @@ public class FlightChart extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Évolution des états de vol");
+        stage.setTitle("ACAP");
 
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Intervalle de 15 min");
-        xAxis.setForceZeroInRange(false);
         xAxis.setTickUnit(1);
 
-        NumberAxis yAxis = new NumberAxis();
+        LogarithmicAxis yAxis = new LogarithmicAxis();
         yAxis.setLabel("Nombre de vols");
+        yAxis.setMinorTickCount(0);
 
         LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setTitle("Statistiques des vols");
@@ -69,6 +174,7 @@ public class FlightChart extends Application {
             XYChart.Series<Number, Number> termineSeries = new XYChart.Series<>();
             termineSeries.setName("Terminé");
 
+            int maxVal = 0;
             for (int i = 0; i < data.size(); i++) {
                 Row row = data.get(i);
                 int interval = i;
@@ -78,7 +184,15 @@ public class FlightChart extends Application {
                 enCoursSeries.getData().add(new XYChart.Data<>(interval, row.enCours()));
                 annuleSeries.getData().add(new XYChart.Data<>(interval, row.annule()));
                 termineSeries.getData().add(new XYChart.Data<>(interval, row.termine()));
+
+                maxVal = Math.max(maxVal, row.planifie());
+                maxVal = Math.max(maxVal, row.retarde());
+                maxVal = Math.max(maxVal, row.enCours());
+                maxVal = Math.max(maxVal, row.annule());
+                maxVal = Math.max(maxVal, row.termine());
             }
+            int upperPower = (int) Math.pow(2, Math.ceil(Math.log(Math.max(maxVal, 2)) / Math.log(2)));
+            yAxis.setUpperBound(upperPower);
 
             lineChart.getData().add(planifieSeries);
             lineChart.getData().add(retardeSeries);
