@@ -22,6 +22,8 @@ public class App {
     private static LocalDateTime currentTime = LocalDateTime.now();
     private static boolean triggerClear = false;
 
+    private static Map<String, ArrayList<Integer>> stats = new HashMap<String, ArrayList<Integer>> ();
+
     public static void main(String[] args) {
         Util.init(aeroports, avions);
 
@@ -32,19 +34,31 @@ public class App {
             System.out.println();
             System.out.print("\033[?25h");
             System.out.flush();
+
+            Util.genCSV(stats);
+            Util.genChart();
         }));
+
+        stats.put("Planifié", new ArrayList<Integer>());
+        stats.put("Retardé", new ArrayList<Integer>());
+        stats.put("En cours", new ArrayList<Integer>());
+        stats.put("Annulé", new ArrayList<Integer>());
+        stats.put("Terminé", new ArrayList<Integer>());
+        stats.put("Crashed", new ArrayList<Integer>());
 
         // hide cursor
         System.out.print("\033[?25l");
         clearTerminal();
         boolean running = true;
+        LocalDateTime saveTime = LocalDateTime.now();
         nouveauVol();
+
         while (running) {
             if (triggerClear) {
                 clearTerminal();
                 triggerClear = false;
             } else {
-                System.out.print("\033[H");
+                System.out.print("\033[3J\033[H");
             }
 
             System.out.println("╔" + "═".repeat(78) + "╗");
@@ -55,20 +69,7 @@ public class App {
             if (random.nextInt(50) == 0) {
                 nouveauVol();
             }
-            // System.out.println("[1] Liste d'aéroports");
-            // System.out.println("[2] Liste d'avions");
-            // System.out.println("[3] Liste de personnes");
-            // System.out.println("[4] Liste de vols");
-            // System.out.println("[0] Quitter");
-            // System.out.print("Entrer le chiffre pour l'action correspondant: ");
 
-            // // ui: user input
-            // int ui = scanner.nextInt();
-            // switch(ui) {
-            //     case 1 -> printListAeroport();
-            //     case 2 -> printListAvion();
-            //     case 0 -> running = false;
-            // }
             verifierEtatVols();
             afficherVols();
             afficherInfosDernierVol();
@@ -76,8 +77,14 @@ public class App {
             System.out.printf("%80s\n", "");
             System.out.println("Appuyer sur <Ctrl+C> pour quitter.");
 
+            // save state every 15 simulation minutes
+            if (saveTime.isBefore(currentTime.minusMinutes(15))) {
+                appendData();
+                saveTime = currentTime;
+            }
+
             try {
-                Thread.sleep(250);
+                Thread.sleep(100);
             } catch (InterruptedException exc) {
                 Thread.currentThread().interrupt();
             }
@@ -147,6 +154,33 @@ public class App {
             passager = Integer.toString(passagersAmt) + " passagers";
         }
         System.out.printf("║Avion %s%s%s %s║\n", avion, " ".repeat(l3Pad), personnel, passager);
+    }
+
+    public static void appendData() {
+        int cntPlanifie = 0;
+        int cntRetarde = 0;
+        int cntEnCours = 0;
+        int cntAnnule = 0;
+        int cntTermine = 0;
+        int cntCrashed = 0;
+
+        for (Vol vol : vols) {
+            switch (vol.getEtat()) {
+                case PLANIFIE -> ++cntPlanifie;
+                case RETARDE -> ++cntRetarde;
+                case EN_COURS -> ++cntEnCours;
+                case ANNULE -> ++cntAnnule;
+                case TERMINE -> ++cntTermine;
+                case CRASHED -> ++cntCrashed;
+            }
+        }
+
+        stats.get("Planifié").add(cntPlanifie);
+        stats.get("Retardé").add(cntRetarde);
+        stats.get("En cours").add(cntEnCours);
+        stats.get("Annulé").add(cntAnnule);
+        stats.get("Terminé").add(cntTermine);
+        stats.get("Crashed").add(cntCrashed);
     }
 
     public static void clearTerminal() {
@@ -225,7 +259,7 @@ public class App {
             if (vol.getEtat() == EtatVol.PLANIFIE && random.nextInt(1000) == 0) {
                 vol.setEtat(EtatVol.ANNULE);
             } else if (vol.getEtat() == EtatVol.PLANIFIE && vol.getDateHeureDepart().isBefore(currentTime)) {
-                if (random.nextInt(50) == 0) {
+                if (random.nextInt(45) == 0) {
                     vol.setEtat(EtatVol.RETARDE);
                     vol.setDateHeureDepart(vol.getDateHeureDepart().plusMinutes(1));
                     vol.setDateHeureArrivee(vol.getDateHeureArrivee().plusMinutes(1));
@@ -233,7 +267,7 @@ public class App {
                     vol.setEtat(EtatVol.EN_COURS);
                 }
             } else if (vol.getEtat() == EtatVol.RETARDE && vol.getDateHeureDepart().isBefore(currentTime)) {
-                if (random.nextInt(25) == 0) {
+                if (random.nextInt(135) == 0) {
                     vol.setEtat(EtatVol.EN_COURS);
                 } else {
                     vol.setDateHeureDepart(vol.getDateHeureDepart().plusMinutes(1));

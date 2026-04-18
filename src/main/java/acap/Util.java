@@ -1,7 +1,12 @@
 package acap;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Map;
+
+import com.opencsv.CSVWriter;
 
 import acap.model.*;
 
@@ -56,39 +61,80 @@ public class Util {
         return deltaT;
     }
 
-    // public static void printListAeroport(ArrayList<Aeroport> aeroports) {
-    //     boolean running = true;
-    //     while (running) {
-    //         clearTerminal();
-    //         for (int i = 0; i < aeroports.size(); i++) {
-    //             System.out.printf("[%d] %s\n", i+1, aeroports.get(i));
-    //         }
-    //         System.out.println("[0] Revenir");
-    //         System.out.print(">>> ");
+    public static void genCSV(Map<String, ArrayList<Integer>> stats) {
+        try {
+            Writer writer = new FileWriter("data.csv");
+            CSVWriter csvWriter = new CSVWriter(
+                writer,
+                CSVWriter.DEFAULT_SEPARATOR,
+                CSVWriter.NO_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END
+            );
+            String[] headers = {"Planifié", "Retardé", "En cours", "Annulé", "Terminé"};
+            csvWriter.writeNext(headers);
 
-    //         int ui = scanner.nextInt();
-    //         switch(ui) {
-    //             case 0 -> running = false;
-    //         }
-    //     }
-    // }
+            int rows = stats.get("Crashed").size();
+            for (int i = 0; i < rows; ++i) {
+                ArrayList<String> cells = new ArrayList<String>();
+                for (String header : headers) {
+                    cells.add(Integer.toString(stats.get(header).get(i)));
+                }
+                String[] stringCells = cells.toArray(new String[cells.size()]);
+                csvWriter.writeNext(stringCells);
+            }
 
-    // public static void printListAvion(ArrayList<Avion> avions) {
-    //     boolean running = true;
-    //     while (running) {
-    //         clearTerminal();
-    //         for (int i = 0; i < avions.size(); i++) {
-    //             System.out.printf("[%d] %s\n", i+1, avions.get(i));
-    //         }
-    //         System.out.println("[0] Revenir");
-    //         System.out.print(">>> ");
+            csvWriter.close();
+        } catch (IOException exc) {
+            System.err.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+    }
 
-    //         int ui = scanner.nextInt();
-    //         switch(ui) {
-    //             case 0 -> running = false;
-    //         }
-    //     }
-    // }
+    public static void genChart() {
+        try {
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            ArrayList<String> classpathEntries = new ArrayList<>();
+            ArrayList<String> javafxModules = new ArrayList<>();
+
+            // a prettier solution surely exist for finding javaFX components
+            if (classLoader instanceof java.net.URLClassLoader) {
+                java.net.URL[] urls = ((java.net.URLClassLoader) classLoader).getURLs();
+                for (java.net.URL url : urls) {
+                    String path = url.getPath();
+                    path = java.net.URLDecoder.decode(path, "UTF-8");
+                    if (System.getProperty("os.name").toLowerCase().contains("win") && path.startsWith("/")) {
+                        path = path.substring(1);
+                    }
+                    classpathEntries.add(path);
+
+                    if (path.contains("javafx-")) javafxModules.add(path);
+                }
+            }
+
+            String fullClasspath = String.join(java.io.File.pathSeparator, classpathEntries);
+
+            ArrayList<String> command = new ArrayList<>();
+            command.add("java");
+
+            String modulePath = String.join(java.io.File.pathSeparator, javafxModules);
+            command.add("--module-path");
+            command.add(modulePath);
+            command.add("--add-modules");
+            command.add("javafx.controls");
+            command.add("--enable-native-access=javafx.graphics");
+
+            command.add("-cp");
+            command.add(fullClasspath);
+            command.add("acap.FlightChart");
+
+            new ProcessBuilder(command).inheritIO().start();
+
+        } catch (Exception exc) {
+            System.err.println(exc.getMessage());
+            exc.printStackTrace();
+        }
+    }
 
     // Map IATA code → Airline name
     public static final Map<String, String> Airlines = Map.ofEntries(
