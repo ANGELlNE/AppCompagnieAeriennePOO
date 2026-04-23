@@ -1,9 +1,10 @@
 # AppCompagnieAeriennePOO
 L'objectif de ce projet est de développer une application qui permet de visualiser les vols de différentes compagnies aériennes.
 
-Mais aussi pour apprendre les notions suivantes:
-- programmation orientée objet avec java
+Mais aussi pour apprendre les notions suivantes :
+- POO en java
 - automatisation avec maven
+- collaboration à travers Github
 
 ![preview.png](preview_terminal.png)
 

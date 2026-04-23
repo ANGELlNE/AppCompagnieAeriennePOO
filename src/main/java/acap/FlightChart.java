@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -144,6 +145,9 @@ public class FlightChart extends Application {
     @Override
     public void start(Stage stage) {
         stage.setTitle("ACAP");
+
+        Image icon = new Image(getClass().getResourceAsStream("icon.png"));
+        stage.getIcons().add(icon);
 
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Intervalle de 15 min");
