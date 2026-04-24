@@ -91,7 +91,7 @@ public class Vol {
             Duration dureeEcoule = Duration.between(dateHeureDepart, currentTime);
             int pctProgression = Math.round(dureeEcoule.getSeconds() * 100 / dureeVol.getSeconds());
             if (pctProgression < 0) pctProgression = 0;
-            if (pctProgression == 100) {
+            if (pctProgression >= 100) {
                 this.etat = EtatVol.TERMINE;
                 return String.format("%-7s %s (%s) %sX (%s) %s", numeroVol, nomOrigine, heureDepart, "-".repeat(45), heureArrivee, nomDestination);
             }
